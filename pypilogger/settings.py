@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+ADMIN_ENABLED = False
 
 # Application definition
 
@@ -38,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'pypilogger',
     'rest_framework',
     'django_elasticsearch_dsl',
     'django_elasticsearch_dsl_drf'
