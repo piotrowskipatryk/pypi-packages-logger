@@ -1,19 +1,33 @@
 version: "3.9"
    
 services:
+  rabbitmq:
+    container_name: rabbitmq
+    hostname: rabbitmq
+    image: rabbitmq:latest
+    networks:
+      - main
+    ports:
+      - "5672:5672"
+    restart: on-failure
+
   db:
     image: postgres
+    container_name: db
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    networks:
+      - main
+
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
     container_name: elasticsearch
+    command: ["elasticsearch", "-Elogger.level=WARN"]
     environment:
       - node.name=elasticsearch
       - cluster.name=es-docker-cluster
-      - discovery.seed_hosts=es02,es03
       - cluster.initial_master_nodes=elasticsearch
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
@@ -25,19 +39,37 @@ services:
       - elasticsearch-data:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
+
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
+    container_name: web
     volumes:
       - .:/code
     ports:
       - "8000:8000"
     depends_on:
       - db
+    image: pypilogger
+    networks:
+      - main
+    restart: on-failure
 
-volumes:
-  data01:
-    driver: local
+  celery_beat:
+    command: sh -c "celery -A pypilogger worker -B -l info"
+    container_name: celery_beat
+    depends_on:
+      - web
+      - db
+      - rabbitmq
+    hostname: celery_beat
+    image: pypilogger
+    networks:
+      - main
+    restart: on-failure
+
+networks:
+  main:
 
 volumes:
   elasticsearch-data:
