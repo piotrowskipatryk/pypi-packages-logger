@@ -6,3 +6,8 @@ django_elasticsearch_dsl_drf==0.20.9
 celery==5.0.5
 django-celery-beat==2.2.0
 django-celery-results==2.0.1
+xmltodict==0.12.0
+django-extensions==3.1.0
+requests==2.25.1
+ipython==7.19.0
+jedi==0.17.2

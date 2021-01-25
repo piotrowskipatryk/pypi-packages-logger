@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
 from celery.schedules import crontab
 from pathlib import Path
 
@@ -45,7 +44,8 @@ INSTALLED_APPS = [
     'django_elasticsearch_dsl',
     'django_elasticsearch_dsl_drf',
     'django_celery_results',
-    'django_celery_beat'
+    'django_celery_beat',
+    'django_extensions'
 ]
 
 MIDDLEWARE = [
