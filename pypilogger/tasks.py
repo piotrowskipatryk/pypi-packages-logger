@@ -12,8 +12,8 @@ def import_newest_packages():
     response = requests.get(url)
     data = xmltodict.parse(response.content)
 
-    for item in data['rss']['channel']['item']:
-        with transaction.atomic():
+    with transaction.atomic():
+        for item in data['rss']['channel']['item']:
             pkg = Package.objects.create(
                 title=item['title'],
                 link=item['link'],
