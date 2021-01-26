@@ -14,7 +14,7 @@ def import_newest_packages():
 
     with transaction.atomic():
         for item in data['rss']['channel']['item']:
-            pkg = Package.objects.create(
+            pkg, created = Package.objects.get_or_create(
                 title=item['title'],
                 link=item['link'],
                 guid=item['guid'],

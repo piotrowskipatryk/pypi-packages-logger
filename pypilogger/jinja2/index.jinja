@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>PyPI logger</title>
+        <meta name="description" content="A simple app with newest packages index. Database is updated once a day.">
+        <meta name="viewport" content="width=device-width">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="{{ static('css/index.css') }}">
+    </head>
+    <body>
+
+        <h1>PyPI logger</h1>
+        <p>A simple app with newest packages index. Database is updated once a day.</p>
+
+        <div class="container">
+            <div class="wrap">
+                <form action="" method="get">
+                    <div class="search">
+                        <input type="text" name="q" value="{{ request.GET.get('q', '') }}" class="searchTerm" placeholder="Search by package data...">
+                        <button type="submit" class="searchButton">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="table">
+                <div class="table-header">
+                    <div class="header__item">Title</div>
+                    <div class="header__item">Description</div>
+                    <div class="header__item">Author</div>
+                    <div class="header__item">Maintainer</div>
+                    <div class="header__item">Version</div>
+                </div>
+                <div class="table-content">
+                    {% for pkg in packages %}
+                        <div class="table-row">		
+                            <div class="table-data">{{ pkg.title or "-" }}</div>
+                            <div class="table-data">{{ pkg.description or "-" }}</div>
+                            <div class="table-data">{{ pkg.author or "-" }}<br />{{ pkg.author_email or "-" }}</div>
+                            <div class="table-data">{{ pkg.maintainer or "-" }}<br />{{ pkg.maintainer_email or "-" }}</div>
+                            <div class="table-data">{{ pkg.version or "-" }}</div>
+                        </div>
+                    {% else %}
+                        <div class="table-row">		
+                            <div class="table-data">Not found :( try something else.</div>
+                        </div>
+                    {% endfor %}
+                </div>	
+            </div>
+        </div>
+
+    </body>
+</html>
