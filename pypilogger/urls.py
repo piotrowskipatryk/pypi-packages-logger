@@ -19,9 +19,9 @@ from pypilogger import views, viewsets
 from rest_framework import routers
 
 router = routers.DefaultRouter()
-router.register(r'packages', viewsets.PackageViewSet, basename='MyModel')
+router.register(r'packages', viewsets.PackageViewSet, basename='packages')
 
 urlpatterns = [
     path('', views.index),
-    path('api/', include(router.urls)),
+    path('api/', include(router.urls), name="api"),
 ]
