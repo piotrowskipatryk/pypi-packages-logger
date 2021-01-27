@@ -13,3 +13,7 @@ docker-compose run web ./manage.py search_index --rebuild
 ## API
 API is available at /api/  
 Search example: /api/packages/?search=title|text_to_find
+
+## Tests
+To run basic tests:  
+docker-compose run web ./manage.py test
