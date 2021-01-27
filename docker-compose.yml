@@ -55,6 +55,8 @@ services:
     networks:
       - elk
     restart: on-failure
+    environment:
+      - PACKAGES_ON_SITE=5
 
   celery_beat:
     command: sh -c "celery -A pypilogger worker -B -l info"

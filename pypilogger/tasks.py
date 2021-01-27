@@ -14,23 +14,27 @@ def import_newest_packages():
 
     with transaction.atomic():
         for item in data['rss']['channel']['item']:
-            pkg, created = Package.objects.get_or_create(
-                title=item['title'],
-                link=item['link'],
-                guid=item['guid'],
-                description=item['description'],
-                author_email=item['author'] if 'author' in item else None,
-                pub_date=dateutil.parser.parse(item['pubDate']),
-            )
-            pypi_name = item['link'].split("/")[-2]
-            url = f'https://pypi.org/pypi/{pypi_name}/json'
-            response = requests.get(url).json()
+            try:
+                pkg, created = Package.objects.get_or_create(
+                    title=item['title'],
+                    link=item['link'],
+                    guid=item['guid'],
+                    description=item['description'],
+                    author_email=item['author'] if 'author' in item else None,
+                    pub_date=dateutil.parser.parse(item['pubDate']),
+                )
+                if not created:
+                    pypi_name = item['link'].split("/")[-2]
+                    url = f'https://pypi.org/pypi/{pypi_name}/json'
+                    response = requests.get(url).json()
 
-            pkg.author = response['info']['author']
-            pkg.keywords = response['info']['keywords']
-            pkg.version = response['info']['version']
-            pkg.maintainer = response['info']['maintainer']
-            pkg.maintainer_email = response['info']['maintainer_email']
-            pkg.save()
+                    pkg.author = response['info']['author']
+                    pkg.keywords = response['info']['keywords']
+                    pkg.version = response['info']['version']
+                    pkg.maintainer = response['info']['maintainer']
+                    pkg.maintainer_email = response['info']['maintainer_email']
+                    pkg.save()
+            except ValueError:
+                continue
 
     return "ok"

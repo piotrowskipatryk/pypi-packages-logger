@@ -14,9 +14,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from pypilogger import views
+from django.urls import path, include
+from pypilogger import views, viewsets
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+router.register(r'packages', viewsets.PackageViewSet, basename='MyModel')
 
 urlpatterns = [
     path('', views.index),
+    path('api/', include(router.urls)),
 ]
