@@ -1,5 +1,5 @@
 # PyPI logger
-## A simple app with newest packages index. Database is updated once a day.
+### A simple app with newest packages index. Database is updated once a day.
 
 PACKAGES_ON_SITE <-- environmental variable to set packages displayed on one page
 
